@@ -87,32 +87,6 @@ python3 main.py input/mon_fichier.pdf
 # Traiter tous les PDF d'un dossier
 python3 main.py input/
 
-
-📁 Structure du projet
-
-docclassai/
-├── app.py                  # Interface web Flask
-├── main.py                 # Programme principal (CLI)
-├── ocr.py                  # Module OCR (Tesseract)
-├── classifier.py           # Module IA (Ollama)
-├── sauvegarde.py           # Renommage et classement
-├── rapport.py              # Génération des rapports
-├── config/
-│   └── settings.py         # Configuration et prompt IA
-├── templates/
-│   └── index.html          # Interface web
-├── input/                  # Dossier des fichiers à traiter
-├── output/                 # Dossier des fichiers classés
-│   ├── Factures/
-│   │   └── 2024/
-│   ├── Recus/
-│   ├── Bons_de_commande/
-│   └── ...
-├── logs/                   # Rapports de traitement
-├── requirements.txt
-└── README.md
-
-
 ⚙️ Configuration
 
 Tu peux personnaliser les règles de classement dans config/settings.py :
