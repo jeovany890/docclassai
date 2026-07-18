@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DocClassAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --card:#111118;
+  --card2:#16161f;
+  --border:#222230;
+  --border2:#2a2a3a;
+  --text:#f0f0f8;
+  --muted:#6b6b80;
+  --hint:#3a3a4a;
+  --blue:#4f6ef7;
+  --blue2:#3a56e0;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#a78bfa;
+  --teal:#2dd4bf;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+
+/* GRID BG */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(var(--hint) 1px,transparent 1px),linear-gradient(90deg,var(--hint) 1px,transparent 1px);
+  background-size:48px 48px;
+  opacity:0.3;pointer-events:none;z-index:0;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,15,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  height:58px;display:flex;align-items:center;padding:0 28px;gap:14px;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-box{
+  width:32px;height:32px;border-radius:9px;
+  background:linear-gradient(135deg,#4f6ef7,#7c3aed);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;color:white;letter-spacing:-0.5px;
+}
+.logo-text{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-0.3px}
+.logo-text b{color:var(--blue);font-weight:700}
+.sep{width:1px;height:18px;background:var(--border);margin:0 2px}
+.nav-sub{font-size:12px;color:var(--muted)}
+.nav-pill{
+  margin-left:auto;
+  display:flex;align-items:center;gap:7px;
+  background:rgba(34,197,94,0.08);
+  border:1px solid rgba(34,197,94,0.2);
+  padding:5px 12px;border-radius:20px;
+  font-size:12px;font-weight:500;color:var(--green);
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* HERO */
+.hero{
+  position:relative;z-index:1;
+  max-width:680px;margin:64px auto 0;padding:0 24px;
+}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(79,110,247,0.1);border:1px solid rgba(79,110,247,0.25);
+  color:#818cf8;padding:5px 14px;border-radius:20px;
+  font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;
+  margin-bottom:22px;
+}
+.hero h1{
+  font-size:38px;font-weight:700;line-height:1.15;
+  letter-spacing:-1.2px;color:var(--text);margin-bottom:14px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,#4f6ef7,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero p{font-size:15px;color:var(--muted);line-height:1.65;max-width:460px;margin-bottom:40px}
+
+/* UPLOAD */
+.upload-wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:0 24px 80px}
+.upload-box{
+  background:var(--card);
+  border:1.5px dashed var(--border2);
+  border-radius:20px;
+  padding:52px 40px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color .2s,background .2s;
+  position:relative;overflow:hidden;
+}
+.upload-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(79,110,247,0.06),transparent 60%);
+  pointer-events:none;
+}
+.upload-box:hover,.upload-box.over{
+  border-color:var(--blue);
+  background:rgba(79,110,247,0.04);
+}
+.up-icon{
+  width:64px;height:64px;
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 22px;
+  transition:transform .2s,border-color .2s;
+}
+.upload-box:hover .up-icon{transform:translateY(-2px);border-color:var(--blue)}
+.up-icon svg{width:26px;height:26px;stroke:var(--muted);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.upload-box h2{font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px;letter-spacing:-0.3px}
+.upload-box p{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+input[type=file]{display:none}
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  padding:10px 22px;border-radius:9px;border:none;cursor:pointer;
+  transition:all .15s;letter-spacing:-0.1px;
+}
+.btn-main{
+  background:var(--blue);color:white;
+  box-shadow:0 0 0 0 rgba(79,110,247,0.4);
+}
+.btn-main:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(79,110,247,0.3)}
+.btn-sec{background:var(--card2);color:var(--muted);border:1px solid var(--border2)}
+.btn-sec:hover{color:var(--text);border-color:var(--border)}
+
+.up-hints{
+  display:flex;justify-content:center;gap:24px;
+  margin-top:28px;padding-top:24px;
+  border-top:1px solid var(--border);
+}
+.hint{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.hint-dot{width:5px;height:5px;border-radius:50%;background:var(--border2)}
+
+/* PROGRESS */
+#sect-prog{display:none;position:relative;z-index:1;max-width:680px;margin:0 auto 80px;padding:0 24px}
+.prog-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px}
+.prog-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.prog-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.prog-fname{font-size:14px;font-weight:500;color:var(--text)}
+.prog-num{font-size:32px;font-weight:700;color:var(--blue);letter-spacing:-1px;line-height:1}
+.bar-track{height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:24px}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:2px;transition:width .6s ease;width:0%}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.step{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 10px;font-size:12px;color:var(--muted);
+  transition:all .25s;
+}
+.step .ico{font-size:18px;display:block;margin-bottom:5px}
+.step .lbl{font-weight:500;display:block;font-size:11px}
+.step.active{border-color:rgba(79,110,247,0.4);background:rgba(79,110,247,0.08);color:#818cf8}
+.step.done{border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.06);color:var(--green)}
+.prog-log{
+  font-family:monospace;font-size:12px;color:var(--muted);
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;
+}
+
+/* RESULTS */
+#sect-res{display:none;position:relative;z-index:1;max-width:680px;margin:0 auto 80px;padding:0 24px}
+.res-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.res-title{font-size:18px;font-weight:600;letter-spacing:-0.4px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.kpi{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+}
+.kpi-val{font-size:36px;font-weight:700;line-height:1;letter-spacing:-1px;margin-bottom:4px}
+.kpi-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted)}
+.g{color:var(--green)}.a{color:var(--amber)}.r{color:var(--red)}
+
+/* TABLE */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead tr{background:var(--card2);border-bottom:1px solid var(--border)}
+thead th{
+  padding:11px 14px;font-size:10px;font-weight:600;color:var(--muted);
+  text-align:left;text-transform:uppercase;letter-spacing:0.6px;
+}
+tbody tr{border-bottom:1px solid rgba(34,34,48,0.6);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.02)}
+tbody td{padding:13px 14px;font-size:13px;vertical-align:middle}
+th:nth-child(1){width:42px}
+th:nth-child(2){width:108px}
+th:nth-child(3){width:130px}
+th:nth-child(4){width:88px}
+th:nth-child(5){width:100px}
+th:nth-child(6){width:76px}
+th:nth-child(7){width:auto}
+
+.badge{
+  display:inline-block;font-size:11px;font-weight:600;
+  padding:3px 9px;border-radius:5px;border:1px solid;letter-spacing:0.1px;
+}
+.b-facture{background:rgba(79,110,247,0.12);color:#818cf8;border-color:rgba(79,110,247,0.25)}
+.b-recu{background:rgba(34,197,94,0.1);color:#4ade80;border-color:rgba(34,197,94,0.2)}
+.b-bon_commande{background:rgba(167,139,250,0.12);color:#c4b5fd;border-color:rgba(167,139,250,0.25)}
+.b-contrat{background:rgba(245,158,11,0.1);color:#fbbf24;border-color:rgba(245,158,11,0.2)}
+.b-devis{background:rgba(45,212,191,0.1);color:#5eead4;border-color:rgba(45,212,191,0.2)}
+.b-autre{background:var(--card2);color:var(--muted);border-color:var(--border2)}
+
+.conf{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500}
+.conf::before{content:'';width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ch{color:var(--green)}.ch::before{background:var(--green)}
+.cm{color:var(--amber)}.cm::before{background:var(--amber)}
+.cf{color:var(--red)}.cf::before{background:var(--red)}
+
+.fname{
+  font-family:'Courier New',monospace;font-size:11px;color:var(--muted);
+  display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.pgn{
+  width:26px;height:26px;border-radius:6px;
+  background:var(--card2);border:1px solid var(--border);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;color:var(--muted);
+}
+
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:20px 28px;display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:var(--muted);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-box">D</div>
+    <span class="logo-text">Doc<b>Class</b>AI</span>
+  </div>
+  <div class="sep"></div>
+  <span class="nav-sub">Classification intelligente de documents</span>
+  <div class="nav-pill"><div class="pulse"></div>Système actif</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-chip">✦ Intelligence artificielle locale</div>
+  <h1>Classifiez vos documents<br/><em>en quelques secondes</em></h1>
+  <p>Déposez un PDF contenant vos documents scannés. L'IA lit, comprend et classe chaque document automatiquement — sans aucune donnée envoyée sur internet.</p>
+</div>
+
+<div class="upload-wrap">
+  <div id="zone-up">
+    <div class="upload-box" id="drop">
+      <div class="up-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12M8 8l4-4 4 4"/></svg>
+      </div>
+      <h2>Glissez votre fichier ici</h2>
+      <p>Un seul PDF contenant tous vos documents scannés.<br/>Le système s'occupe du reste automatiquement.</p>
+      <input type="file" id="fi" accept=".pdf"/>
+      <button class="btn btn-main" onclick="document.getElementById('fi').click()">
+        Choisir un fichier PDF
+      </button>
+      <div class="up-hints">
+        <span class="hint"><span class="hint-dot"></span>Données 100% locales</span>
+        <span class="hint"><span class="hint-dot"></span>Zéro internet requis</span>
+        <span class="hint"><span class="hint-dot"></span>PDF uniquement</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sect-prog">
+  <div class="prog-box">
+    <div class="prog-head">
+      <div>
+        <div class="prog-label">Traitement en cours</div>
+        <div class="prog-fname" id="p-fname">—</div>
+      </div>
+      <div class="prog-num" id="p-pct">0%</div>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="p-bar"></div></div>
+    <div class="steps">
+      <div class="step" id="s1"><span class="ico">🔍</span><span class="lbl">Lecture OCR</span></div>
+      <div class="step" id="s2"><span class="ico">🤖</span><span class="lbl">Analyse IA</span></div>
+      <div class="step" id="s3"><span class="ico">💾</span><span class="lbl">Sauvegarde</span></div>
+      <div class="step" id="s4"><span class="ico">📋</span><span class="lbl">Rapport</span></div>
+    </div>
+    <div class="prog-log" id="p-msg">Initialisation...</div>
+  </div>
+</div>
+
+<div id="sect-res">
+  <div class="res-head">
+    <div class="res-title" id="r-title">Documents traités</div>
+    <button class="btn btn-sec" onclick="raz()">← Nouveau fichier</button>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-val g" id="k-h">0</div><div class="kpi-lbl">Haute confiance</div></div>
+    <div class="kpi"><div class="kpi-val a" id="k-m">0</div><div class="kpi-lbl">À vérifier</div></div>
+    <div class="kpi"><div class="kpi-val r" id="k-f">0</div><div class="kpi-lbl">Faible confiance</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>Pg.</th><th>Type</th><th>Fournisseur</th><th>Date</th><th>Montant</th><th>Confiance</th><th>Fichier créé</th></tr>
+      </thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  <span>DocClassAI v1.0 · 100% local · aucune donnée transmise</span>
+  <span>Zéro abonnement</span>
+</footer>
+
+<script>
+let timer=null;
+const drop=document.getElementById('drop');
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over')});
+drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
+drop.addEventListener('drop',e=>{
+  e.preventDefault();drop.classList.remove('over');
+  const f=e.dataTransfer.files[0];
+  if(f?.name.endsWith('.pdf'))go(f);else alert('PDF uniquement.');
+});
+document.getElementById('fi').addEventListener('change',e=>{if(e.target.files[0])go(e.target.files[0])});
+
+async function go(file){
+  const fd=new FormData();fd.append('fichier',file);
+  try{
+    const r=await fetch('/upload',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.erreur){alert(d.erreur);return;}
+    document.getElementById('zone-up').style.display='none';
+    document.getElementById('sect-prog').style.display='block';
+    document.getElementById('p-fname').textContent=file.name;
+    timer=setInterval(poll,1500);
+  }catch(e){alert('Erreur : '+e.message);}
+}
+
+async function poll(){
+  const d=await(await fetch('/progression')).json();
+  const p=d.progression;
+  document.getElementById('p-bar').style.width=p+'%';
+  document.getElementById('p-pct').textContent=p+'%';
+  document.getElementById('p-msg').textContent=d.message;
+  st('s1',p>=5,p>=30);st('s2',p>=30,p>=90);st('s3',p>=50,p>=92);st('s4',p>=92,p>=100);
+  if(d.termine||(!d.en_cours&&d.resultats.length>0)){clearInterval(timer);show(d.resultats);}
+  if(d.erreur){clearInterval(timer);alert('Erreur : '+d.erreur);}
+}
+
+function st(id,active,done){
+  const el=document.getElementById(id);
+  el.classList.toggle('active',active&&!done);
+  el.classList.toggle('done',done);
+}
+
+function show(res){
+  document.getElementById('sect-prog').style.display='none';
+  document.getElementById('sect-res').style.display='block';
+  document.getElementById('r-title').textContent=res.length+' document'+(res.length>1?'s':'')+' traité'+(res.length>1?'s':'');
+  document.getElementById('k-h').textContent=res.filter(r=>r.infos.confiance==='haute').length;
+  document.getElementById('k-m').textContent=res.filter(r=>r.infos.confiance==='moyenne').length;
+  document.getElementById('k-f').textContent=res.filter(r=>r.infos.confiance==='faible').length;
+  const tb=document.getElementById('tb');tb.innerHTML='';
+  res.forEach(r=>{
+    const i=r.infos;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="pgn">${r.page}</span></td>
+      <td><span class="badge b-${i.type}">${i.type}</span></td>
+      <td style="font-weight:500">${i.fournisseur||'—'}</td>
+      <td style="color:var(--muted)">${i.date||'—'}</td>
+      <td style="font-weight:500">${i.montant_total?i.montant_total+' '+(i.devise||''):'—'}</td>
+      <td><span class="conf c${i.confiance[0]}">${i.confiance}</span></td>
+      <td><span class="fname" title="${r.nom_fichier}">${r.nom_fichier}</span></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+function raz(){
+  document.getElementById('zone-up').style.display='block';
+  document.getElementById('sect-prog').style.display='none';
+  document.getElementById('sect-res').style.display='none';
+  document.getElementById('fi').value='';
+  document.getElementById('p-bar').style.width='0%';
+  document.getElementById('p-pct').textContent='0%';
+  ['s1','s2','s3','s4'].forEach(id=>document.getElementById(id).classList.remove('active','done'));
+}
+</script>
+</body>
+</html>
